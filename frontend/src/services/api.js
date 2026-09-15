@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-// Base API URL (defaults to production Render backend if env var is missing/empty)
-const rawApiUrl = (import.meta.env && import.meta.env.VITE_API_URL) || 'https://campusfind-api-b034.onrender.com';
-const cleanApiUrl = rawApiUrl.replace(/\/+$/, '').replace(/\/api$/, '');
+// Base API URL (uses relative /api by default for unified hosting & tunnels, or VITE_API_URL if provided)
+const rawApiUrl = (import.meta.env && import.meta.env.VITE_API_URL) || '';
+const cleanApiUrl = rawApiUrl ? rawApiUrl.replace(/\/+$/, '').replace(/\/api$/, '') : '';
 export const BACKEND_URL = cleanApiUrl;
 
 const api = axios.create({
-  baseURL: `${cleanApiUrl}/api`,
+  baseURL: cleanApiUrl ? `${cleanApiUrl}/api` : '/api',
   headers: {
     'Content-Type': 'application/json',
   },
