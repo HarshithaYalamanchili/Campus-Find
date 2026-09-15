@@ -1,11 +1,10 @@
 services:
   - type: web
-    name: campusfind-backend
+    name: campusfind
     env: node
     plan: free
-    rootDir: backend
-    buildCommand: npm install
-    startCommand: node src/server.js
+    buildCommand: npm run build
+    startCommand: npm start
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
