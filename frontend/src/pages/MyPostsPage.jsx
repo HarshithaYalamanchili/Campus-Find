@@ -13,6 +13,7 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { format } from 'date-fns';
+import { BACKEND_URL } from '../services/api';
 
 const MyPostsPage = () => {
   const [items, setItems] = useState([]);
@@ -125,7 +126,7 @@ const MyPostsPage = () => {
               item.images && item.images.length > 0 && item.images[0].url
                 ? item.images[0].url.startsWith('http')
                   ? item.images[0].url
-                  : `http://localhost:5000${item.images[0].url}`
+                  : `${BACKEND_URL}${item.images[0].url}`
                 : 'https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?w=600&auto=format&fit=crop&q=80';
 
             return (

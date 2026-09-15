@@ -1,10 +1,12 @@
 import axios from 'axios';
 
-// Base API URL (falls back to relative path for Vite proxy / production)
-const API_BASE_URL = import.meta.env.VITE_API_URL || '';
+// Base API URL (defaults to production Render backend if env var is missing/empty)
+const rawApiUrl = (import.meta.env && import.meta.env.VITE_API_URL) || 'https://campusfind-api-b034.onrender.com';
+const cleanApiUrl = rawApiUrl.replace(/\/+$/, '').replace(/\/api$/, '');
+export const BACKEND_URL = cleanApiUrl;
 
 const api = axios.create({
-  baseURL: API_BASE_URL ? `${API_BASE_URL}/api` : '/api',
+  baseURL: `${cleanApiUrl}/api`,
   headers: {
     'Content-Type': 'application/json',
   },

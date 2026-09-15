@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { MapPin, Calendar, Tag, CheckCircle2, ArrowRight } from 'lucide-react';
 import { formatDistanceToNow, format } from 'date-fns';
 import MatchScoreBadge from './MatchScoreBadge';
+import { BACKEND_URL } from '../services/api';
 
 const ItemCard = ({ item, matchScore, matchBreakdown }) => {
   if (!item) return null;
@@ -14,7 +15,7 @@ const ItemCard = ({ item, matchScore, matchBreakdown }) => {
     item.images && item.images.length > 0 && item.images[0].url
       ? item.images[0].url.startsWith('http')
         ? item.images[0].url
-        : `http://localhost:5000${item.images[0].url}`
+        : `${BACKEND_URL}${item.images[0].url}`
       : 'https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?w=600&auto=format&fit=crop&q=80';
 
   let formattedDate = 'Recently';

@@ -23,6 +23,7 @@ import { format } from 'date-fns';
 import MatchScoreBadge from '../components/MatchScoreBadge';
 import MatchComparisonModal from '../components/MatchComparisonModal';
 import ContactPosterModal from '../components/ContactPosterModal';
+import { BACKEND_URL } from '../services/api';
 
 const ItemDetailsPage = () => {
   const { id } = useParams();
@@ -140,7 +141,7 @@ const ItemDetailsPage = () => {
 
   const currentImage = images[selectedImageIndex]?.url?.startsWith('http')
     ? images[selectedImageIndex].url
-    : `http://localhost:5000${images[selectedImageIndex]?.url}`;
+    : `${BACKEND_URL}${images[selectedImageIndex]?.url}`;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
@@ -191,7 +192,7 @@ const ItemDetailsPage = () => {
               {images.map((img, idx) => {
                 const thumbUrl = img.url.startsWith('http')
                   ? img.url
-                  : `http://localhost:5000${img.url}`;
+                  : `${BACKEND_URL}${img.url}`;
                 return (
                   <button
                     key={idx}
@@ -420,7 +421,7 @@ const ItemDetailsPage = () => {
                       match.item.images && match.item.images.length > 0
                         ? match.item.images[0].url.startsWith('http')
                           ? match.item.images[0].url
-                          : `http://localhost:5000${match.item.images[0].url}`
+                          : `${BACKEND_URL}${match.item.images[0].url}`
                         : 'https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?w=600&auto=format&fit=crop&q=80'
                     }
                     alt={match.item.title}
