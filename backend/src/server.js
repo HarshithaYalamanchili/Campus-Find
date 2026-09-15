@@ -45,6 +45,20 @@ app.use('/api/items', require('./routes/itemRoutes'));
 app.use('/api/matches', require('./routes/matchRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
 
+// Serve frontend static build in production if available
+const frontendDistPath = path.join(__dirname, '../../frontend/dist');
+const fs = require('fs');
+if (fs.existsSync(frontendDistPath)) {
+  app.use(express.static(frontendDistPath));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api') || req.path.startsWith('/uploads')) {
+      return next();
+    }
+    res.sendFile(path.join(frontendDistPath, 'index.html'));
+  });
+  console.log('📦 Serving production frontend build from /frontend/dist');
+}
+
 // Error handling middlewares
 app.use(notFound);
 app.use(errorHandler);
