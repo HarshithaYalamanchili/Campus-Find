@@ -12,15 +12,16 @@ dotenv.config();
 
 const app = express();
 
-// Enable CORS for frontend Vite dev server & production tunnels
+// Enable CORS for frontend Vite dev server, Vercel deployments & production tunnels
 app.use(
   cors({
-    origin: '*',
+    origin: true,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
+app.options('*', cors());
 
 // Body parser
 app.use(express.json({ limit: '10mb' }));
@@ -30,7 +31,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // Health Check API
-app.get('/api/health', (req, res) => {
+app.get(['/api/health', '/health'], (req, res) => {
   res.status(200).json({
     status: 'online',
     service: 'CampusFind API',
@@ -39,11 +40,23 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Mount Routes
-app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/items', require('./routes/itemRoutes'));
-app.use('/api/matches', require('./routes/matchRoutes'));
-app.use('/api/users', require('./routes/userRoutes'));
+// Mount Routes (support both /api/ prefix and direct prefix for backwards compatibility)
+const authRoutes = require('./routes/authRoutes');
+const itemRoutes = require('./routes/itemRoutes');
+const matchRoutes = require('./routes/matchRoutes');
+const userRoutes = require('./routes/userRoutes');
+
+app.use('/api/auth', authRoutes);
+app.use('/auth', authRoutes);
+
+app.use('/api/items', itemRoutes);
+app.use('/items', itemRoutes);
+
+app.use('/api/matches', matchRoutes);
+app.use('/matches', matchRoutes);
+
+app.use('/api/users', userRoutes);
+app.use('/users', userRoutes);
 
 // Serve frontend static build in production if available
 const frontendDistPath = path.join(__dirname, '../../frontend/dist');
