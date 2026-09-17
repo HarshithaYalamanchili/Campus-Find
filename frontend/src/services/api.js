@@ -1,7 +1,20 @@
 import axios from 'axios';
 
-// Base API URL (uses relative /api by default for unified hosting & tunnels, or VITE_API_URL if provided)
-const rawApiUrl = (import.meta.env && import.meta.env.VITE_API_URL) || '';
+// Base API URL:
+// 1. If VITE_API_URL is set, use it.
+// 2. If running on vercel.app and no custom API URL is set, point to Render backend
+// 3. Otherwise, use relative '' (works seamlessly on Render, unified server, and tunnels)
+const getApiBase = () => {
+  if (import.meta.env && import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  if (typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')) {
+    return 'https://campusfind-api-b034.onrender.com';
+  }
+  return '';
+};
+
+const rawApiUrl = getApiBase();
 const cleanApiUrl = rawApiUrl ? rawApiUrl.replace(/\/+$/, '').replace(/\/api$/, '') : '';
 export const BACKEND_URL = cleanApiUrl;
 
